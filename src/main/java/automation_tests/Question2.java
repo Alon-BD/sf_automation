@@ -5,6 +5,7 @@ import api.tasks_objects.HttpTask;
 import com.jayway.restassured.response.Response;
 import helpers.entities.StoryEntity;
 import infra.rest.RestUtils;
+import infra.task_executer.TaskExecutor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,15 +17,18 @@ import java.util.concurrent.TimeUnit;
 
 public class Question2 extends BaseTest {
 
-    private final int TERMINATION_TIMEOUT = 5;
     private final String DATOERROR_URL = "http://ptsv2.com/t/datoerror/post";
     private final String DATOTEST1_URL = "http://ptsv2.com/t/datotest1/post";
     private final String DATOTEST2_URL = "http://ptsv2.com/t/datotest2/post";
     private final String DATOTEST3_URL = "http://ptsv2.com/t/datotest3/post";
     private final String DELAY_URL = "https://postman-echo.com/delay/10";
+    private final int TERMINATION_TIMEOUT = 5;
+    private final int MAX_THREADS = 5;
 
+    private TaskExecutor taskExecuter = new TaskExecutor(MAX_THREADS);
     private StringBuilder output = new StringBuilder("");
     private List<HttpTask> tasks = new ArrayList();
+
 
     @BeforeMethod
     private void setUp() {

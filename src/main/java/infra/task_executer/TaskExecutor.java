@@ -4,19 +4,12 @@ import java.util.concurrent.*;
 
 public class TaskExecutor {
 
-    private static int NUM_THREADS = 40;
+    private static int NUM_THREADS;
     private static ScheduledExecutorService taskExecutor = null;
-    private static TaskExecutor instance = null;
 
-    private TaskExecutor() {
+    public TaskExecutor(int numThreads) {
+        NUM_THREADS = numThreads;
         taskExecutor = Executors.newScheduledThreadPool(NUM_THREADS);
-    }
-
-    public static TaskExecutor getInstance() {
-        if (instance == null)
-            instance = new TaskExecutor();
-
-        return instance;
     }
 
     public <T> ScheduledFuture<T> executeTask(Callable<T> task, int timeout) {

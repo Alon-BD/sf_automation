@@ -5,6 +5,7 @@ import api.tasks_objects.HttpTask;
 import com.jayway.restassured.response.Response;
 import helpers.enums.StatusCodeEnums;
 import infra.general_utils.Randomizer;
+import infra.task_executer.TaskExecutor;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 
 public class Question1 extends BaseTest {
+
 
     private final String DELAY_URL = "https://postman-echo.com/delay/";
     private final String STATUS_URL = "https://postman-echo.com/status/";
@@ -24,6 +26,7 @@ public class Question1 extends BaseTest {
     private int numDelayRequests;
     private int numStatusRequests;
 
+    private TaskExecutor taskExecuter = new TaskExecutor(MAX_API_CALLS);
     private List<HttpTask> delayTasks = new ArrayList();
     private List<HttpTask> statusTasks = new ArrayList();
 
