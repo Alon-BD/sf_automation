@@ -1,4 +1,4 @@
-package api.tasks_objects;
+package helpers.tasks_objects;
 
 import com.jayway.restassured.response.Response;
 import helpers.entities.StoryEntity;

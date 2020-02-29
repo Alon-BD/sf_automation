@@ -1,9 +1,9 @@
 package automation_tests;
 
-import api.http_tasks.HttpGet;
-import api.tasks_objects.HttpTask;
+import helpers.tasks_objects.*;
 import com.jayway.restassured.response.Response;
 import helpers.enums.StatusCodeEnums;
+import helpers.tasks_objects.http_tasks.HttpGet;
 import infra.general_utils.Randomizer;
 import infra.task_executer.TaskExecutor;
 import org.testng.annotations.BeforeClass;
