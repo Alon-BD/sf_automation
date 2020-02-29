@@ -14,7 +14,7 @@ public abstract class HttpTask extends Task implements Comparable<HttpTask> {
 
     protected String url = null;
     protected RestAssuredWrapper rest = new RestAssuredWrapper();
-    private ScheduledFuture<Response> response = null;
+
 
     public HttpTask() {
     }
@@ -40,7 +40,7 @@ public abstract class HttpTask extends Task implements Comparable<HttpTask> {
     public Response getResponse() {
         Response res = null;
         try {
-            res = response.get();
+            res = (Response) future.get();
         } catch (CancellationException e) {
             System.out.println(toString() + "has reached timeout\n");
 
@@ -57,21 +57,21 @@ public abstract class HttpTask extends Task implements Comparable<HttpTask> {
     }
 
     public boolean isDone() {
-        if (response == null)
+        if (future == null)
             return false;
 
-        return response.isDone();
+        return future.isDone();
     }
 
     public boolean isCanceled() {
-        if (response == null)
+        if (future == null)
             return false;
 
-        return response.isCancelled();
+        return future.isCancelled();
     }
 
     public boolean cancel(boolean flag) {
-        return response.cancel(flag);
+        return future.cancel(flag);
     }
 
 
@@ -85,7 +85,7 @@ public abstract class HttpTask extends Task implements Comparable<HttpTask> {
     }
 
     public void setFutureResponse(ScheduledFuture<Response> res) {
-        response = res;
+        future = res;
     }
 
     @Override
