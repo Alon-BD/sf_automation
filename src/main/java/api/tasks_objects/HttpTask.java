@@ -1,4 +1,4 @@
-package api.http_tasks;
+package api.tasks_objects;
 
 import com.jayway.restassured.response.Response;
 import helpers.entities.StoryEntity;
@@ -7,21 +7,20 @@ import infra.rest.RestAssuredWrapper;
 import infra.rest.RestUtils;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ScheduledFuture;
 
-public abstract class HttpTask implements Comparable<HttpTask>, Callable<Response> {
+public abstract class HttpTask extends Task implements Comparable<HttpTask> {
 
-    private static int numInstances;
-
-    private ScheduledFuture<Response> response = null;
-    protected int id;
     protected String url = null;
     protected RestAssuredWrapper rest = new RestAssuredWrapper();
+    private ScheduledFuture<Response> response = null;
 
-    public void setFutureResponse(ScheduledFuture<Response> res) {
-        response = res;
+    public HttpTask() {
+    }
+
+    public HttpTask(String url) {
+        this.url = url;
     }
 
     @Override
@@ -75,14 +74,7 @@ public abstract class HttpTask implements Comparable<HttpTask>, Callable<Respons
         return response.cancel(flag);
     }
 
-    public HttpTask() {
-        id = increment();
-    }
 
-    public HttpTask(String url) {
-        this.url = url;
-        id = increment();
-    }
 
     public int getId() {
         return id;
@@ -92,8 +84,11 @@ public abstract class HttpTask implements Comparable<HttpTask>, Callable<Respons
         return url;
     }
 
+    public void setFutureResponse(ScheduledFuture<Response> res) {
+        response = res;
+    }
 
-
+    @Override
     public int compareTo(HttpTask friend) {
         String datePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
@@ -124,9 +119,7 @@ public abstract class HttpTask implements Comparable<HttpTask>, Callable<Respons
         return thisTimeStamp.compareTo(friendTimestamp);
     }
 
-    private static synchronized int increment() {
-        return ++numInstances;
-    }
+
 
 
 }
