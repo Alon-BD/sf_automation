@@ -4,12 +4,15 @@ import helpers.tasks_objects.http_tasks.HttpGet;
 import helpers.tasks_objects.HttpTask;
 import com.jayway.restassured.response.Response;
 import helpers.entities.StoryEntity;
+import infra.general_utils.DateParser;
 import infra.rest.RestUtils;
 import infra.task_executer.TaskExecutor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +32,6 @@ public class Question2 extends BaseTest {
     private StringBuilder output = new StringBuilder("");
     private List<HttpTask> tasks = new ArrayList();
 
-
     @BeforeMethod
     private void setUp() {
         initTasksArr();
@@ -39,19 +41,27 @@ public class Question2 extends BaseTest {
     public void Question2() {
         executeAllTasks();
         taskExecuter.shutDown();
-        taskExecuter.awaitTermination(TERMINATION_TIMEOUT +5, TimeUnit.SECONDS);
+        taskExecuter.awaitTermination(TERMINATION_TIMEOUT, TimeUnit.SECONDS);
 
-        Collections.sort(tasks);
-        for (HttpTask task : tasks) {
-            Response response = null;
-            response = task.getResponse();
+        for (StoryEntity storyEntity : getSortedStories()) {
+            output.append(storyEntity.story + " (" + storyEntity.timeStamp + ")\n");
+        }
 
+        System.out.println(output);
+    }
+
+    private ArrayList<StoryEntity> getSortedStories() {
+        ArrayList<StoryEntity> storiesWithTimeStamp = new ArrayList<>();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Response response = tasks.get(i).getResponse();
             if (response != null) {
-                StoryEntity myEntity = RestUtils.convertJsonToObject(response.getBody().asString(), StoryEntity.class);
-                output.append(myEntity.story + " (" + myEntity.timeStamp + ")\n");
+                StoryEntity story = RestUtils.convertJsonToObject(tasks.get(i).getResponse().getBody().asString(), StoryEntity.class);
+                storiesWithTimeStamp.add(story);
             }
         }
-        System.out.println(output);
+        Collections.sort(storiesWithTimeStamp);
+        return storiesWithTimeStamp;
     }
 
     private void initTasksArr() {

@@ -10,11 +10,10 @@ import java.time.LocalDateTime;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ScheduledFuture;
 
-public abstract class HttpTask extends Task implements Comparable<HttpTask> {
+public abstract class HttpTask extends Task {
 
     protected String url = null;
     protected RestAssuredWrapper rest = new RestAssuredWrapper();
-
 
     public HttpTask() {
     }
@@ -87,39 +86,4 @@ public abstract class HttpTask extends Task implements Comparable<HttpTask> {
     public void setFutureResponse(ScheduledFuture<Response> res) {
         future = res;
     }
-
-    @Override
-    public int compareTo(HttpTask friend) {
-        String datePattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
-
-        if(isCanceled())
-            return 0;
-
-        if(friend.isCanceled())
-            return 1;
-
-        StoryEntity thisEntity = RestUtils.convertJsonToObject(getResponse().getBody().asString(), StoryEntity.class);
-        LocalDateTime thisTimeStamp = DateParser.parseDate(datePattern, thisEntity.timeStamp);
-
-        StoryEntity friendEntity = RestUtils.convertJsonToObject(friend.getResponse().getBody().asString(), StoryEntity.class);
-        LocalDateTime friendTimestamp = DateParser.parseDate(datePattern, friendEntity.timeStamp);
-
-        if (thisTimeStamp == null && friendTimestamp == null) {
-            return 0;
-        }
-
-        if (thisTimeStamp == null) {
-            return -1;
-        }
-
-        if (friendTimestamp == null) {
-            return 1;
-        }
-
-        return thisTimeStamp.compareTo(friendTimestamp);
-    }
-
-
-
-
 }
