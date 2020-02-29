@@ -1,5 +1,6 @@
 package api.http_tasks;
 
+import api.tasks_objects.HttpTask;
 import com.jayway.restassured.response.Response;
 import infra.general_utils.StatusCodeHandler;
 

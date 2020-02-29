@@ -1,7 +1,7 @@
 package automation_tests;
 
 import api.http_tasks.HttpGet;
-import api.http_tasks.HttpTask;
+import api.tasks_objects.HttpTask;
 import com.jayway.restassured.response.Response;
 import helpers.entities.StoryEntity;
 import infra.rest.RestUtils;
