@@ -5,7 +5,7 @@ import java.util.concurrent.*;
 public class TaskExecutor {
 
     private static int NUM_THREADS;
-    private static ScheduledExecutorService taskExecutor = null;
+    private ScheduledExecutorService taskExecutor = null;
 
     public TaskExecutor(int numThreads) {
         NUM_THREADS = numThreads;
